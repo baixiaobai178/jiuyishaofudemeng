@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>スライドショー展示</title>
+  <style>
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      background: #000;
+      overflow: hidden;
+    }
+    #background-video {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100vw;
+      min-height: 100vh;
+      width: auto;
+      height: auto;
+      z-index: 1;
+      object-fit: cover;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    #slideshow-container {
+      position: relative;
+      width: 90vw;
+      height: 90vh;
+      margin: 5vh auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    #slideshow {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #222;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+    #audio-controls {
+      position: absolute;
+      bottom: 20px;
+      right: 30px;
+      z-index: 3;
+    }
+    /* モバイル対応 */
+    @media (max-width: 600px) {
+      #slideshow-container {
+        width: 98vw;
+        height: 70vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 背景動画 -->
+  <video id="background-video" src="bgm.mp4" autoplay loop muted playsinline></video>
+  
+  <div id="slideshow-container">
+    <img id="slideshow" src="img1.jpg" alt="スライドショー">
+    <div id="audio-controls">
+      <!-- 背景音楽 -->
+      <audio id="bgm" src="bgm.mp3" autoplay loop controls></audio>
+    </div>
+  </div>
+  <script>
+    // 画像ファイル名リスト
+    const images = [
+      "img1.jpg",
+      "img2.jpg",
+      "img3.jpg",
+      "img4.jpg",
+      "img5.jpg",
+      "img6.jpg"
+    ];
+    let index = 0;
+    const imgElement = document.getElementById("slideshow");
+    setInterval(() => {
+      index = (index + 1) % images.length;
+      imgElement.src = images[index];
+    }, 3000); // 3秒ごとに切り替え
+
+    // オート再生対応（特にiOSやSafari対策）
+    window.addEventListener("DOMContentLoaded", function() {
+      const video = document.getElementById("background-video");
+      const audio = document.getElementById("bgm");
+      // 動画と音楽を自動再生
+      video.muted = true;
+      video.play().catch(()=>{});
+      audio.play().catch(()=>{});
+    });
+  </script>
+</body>
+</html>
